@@ -60,7 +60,7 @@ func (r *AnnoyanceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 		return ctrl.Result{}, fmt.Errorf("can't get annoyance %s in namespace %s: %v", req.NamespacedName.Name, req.NamespacedName.Namespace, err)
 	}
 
-	fmt.Printf("Annoying nuaced with %s", annoyance.Spec.Nuance)
+	fmt.Printf("Annoying nuanced with %s\n", annoyance.Spec.Nuance)
 	switch annoyance.Spec.Nuance {
 	case annoyingv1alpha1.NuancePublishingStrategy:
 		err = r.annoyPublishingStrategy(annoyance)

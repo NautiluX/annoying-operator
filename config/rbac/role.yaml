@@ -1,0 +1,45 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - annoying.getting.coffee
+  resources:
+  - annoyances
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - annoying.getting.coffee
+  resources:
+  - annoyances/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - annoying.getting.coffee
+  resources:
+  - annoyances/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - cloudingress.managed.openshift.io
+  resources:
+  - publishingstrategies
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch

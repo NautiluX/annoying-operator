@@ -20,16 +20,18 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
+type AnnoyanceNuance string
+
+const NuancePublishingStrategy AnnoyanceNuance = "publishingstrategy"
+
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
 // AnnoyanceSpec defines the desired state of Annoyance
 type AnnoyanceSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
 
-	// Foo is an example field of Annoyance. Edit annoyance_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	// Nuance is the type of annoyance to inject. Supported nuances: publishingstrategy
+	Nuance AnnoyanceNuance `json:"nuance,omitempty"`
 }
 
 // AnnoyanceStatus defines the observed state of Annoyance

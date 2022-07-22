@@ -1,0 +1,24 @@
+# permissions for end users to edit annoyances.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: annoyance-editor-role
+rules:
+- apiGroups:
+  - annoying.getting.coffee
+  resources:
+  - annoyances
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - annoying.getting.coffee
+  resources:
+  - annoyances/status
+  verbs:
+  - get

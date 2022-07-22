@@ -1,0 +1,20 @@
+# permissions for end users to view annoyances.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: annoyance-viewer-role
+rules:
+- apiGroups:
+  - annoying.getting.coffee
+  resources:
+  - annoyances
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - annoying.getting.coffee
+  resources:
+  - annoyances/status
+  verbs:
+  - get

@@ -1,0 +1,6 @@
+apiVersion: annoying.getting.coffee/v1alpha1
+kind: Annoyance
+metadata:
+  name: annoyance-sample
+spec:
+  nuance: publishingstrategy

@@ -23,6 +23,7 @@ import (
 type AnnoyanceNuance string
 
 const NuancePublishingStrategy AnnoyanceNuance = "publishingstrategy"
+const NuanceNetworkPolicy AnnoyanceNuance = "networkpolicy"
 
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
@@ -30,8 +31,8 @@ const NuancePublishingStrategy AnnoyanceNuance = "publishingstrategy"
 // AnnoyanceSpec defines the desired state of Annoyance
 type AnnoyanceSpec struct {
 
-	// Nuance is the type of annoyance to inject. Supported nuances: publishingstrategy
-	Nuance AnnoyanceNuance `json:"nuance,omitempty"`
+	// Nuance is the type of annoyances to inject. Supported nuances: publishingstrategy, networkpolicy
+	Nuance []AnnoyanceNuance `json:"nuance,omitempty"`
 }
 
 // AnnoyanceStatus defines the observed state of Annoyance

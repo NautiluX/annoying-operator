@@ -4,4 +4,6 @@ metadata:
   name: annoyance-sample
   namespace: default
 spec:
-  nuance: publishingstrategy
+  nuance:
+   - publishingstrategy
+   - networkpolicy

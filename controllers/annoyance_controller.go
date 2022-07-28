@@ -42,6 +42,7 @@ type AnnoyanceReconciler struct {
 //+kubebuilder:rbac:groups=annoying.getting.coffee,resources=annoyances/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=annoying.getting.coffee,resources=annoyances/finalizers,verbs=update
 //+kubebuilder:rbac:groups=cloudingress.managed.openshift.io,resources=publishingstrategies,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=networking.k8s.io,resources=networkpolicies,verbs=get;list;watch;create;update;patch;delete
 
 // Reconcile is part of the main kubernetes reconciliation loop which aims to
 // move the current state of the cluster closer to the desired state.
@@ -60,14 +61,20 @@ func (r *AnnoyanceReconciler) Reconcile(ctx context.Context, req ctrl.Request) (
 		return ctrl.Result{}, fmt.Errorf("can't get annoyance %s in namespace %s: %v", req.NamespacedName.Name, req.NamespacedName.Namespace, err)
 	}
 
-	fmt.Printf("Annoying nuanced with %s\n", annoyance.Spec.Nuance)
-	switch annoyance.Spec.Nuance {
-	case annoyingv1alpha1.NuancePublishingStrategy:
-		err = r.annoyPublishingStrategy(annoyance)
-	}
+	for _, nuance := range annoyance.Spec.Nuance {
+		fmt.Printf("Annoying nuanced with %s\n", nuance)
+		switch nuance {
+		case annoyingv1alpha1.NuancePublishingStrategy:
+			err = r.annoyPublishingStrategy(annoyance)
+		case annoyingv1alpha1.NuanceNetworkPolicy:
+			err = r.annoyNetworkPolicy(annoyance)
+		}
 
-	if err != nil {
-		return ctrl.Result{}, fmt.Errorf("failed to annoy with nuance %s: %v", annoyance.Spec.Nuance, err)
+		if err != nil {
+			fmt.Printf("failed to annoy with nuance %s: %v\n", nuance, err)
+			continue
+		}
+
 	}
 
 	return annoyAgainSoon()
@@ -106,6 +113,43 @@ func createPublishingstrategies(name string) unstructured.Unstructured {
 		Version: "v1alpha1",
 	})
 	return *publishingstrategy
+}
+
+func (r *AnnoyanceReconciler) annoyNetworkPolicy(annoyance annoyingv1alpha1.Annoyance) error {
+	policy := createNetworkPolicy("AnnoyingPlicy")
+	err := r.Create(context.TODO(), &policy, &client.CreateOptions{})
+	if err != nil && !errors.IsAlreadyExists(err) {
+		return fmt.Errorf("can't create NetworkPolicy: %v", err)
+	}
+
+	return nil
+}
+
+func createNetworkPolicy(name string) unstructured.Unstructured {
+	// Using a unstructured object.
+	policy := &unstructured.Unstructured{}
+	policy.Object = map[string]interface{}{
+		"metadata": map[string]interface{}{
+			"name":      "annoying-policy",
+			"namespace": "openshift-console",
+		},
+		"spec": map[string]interface{}{
+			"podSelector": map[string]interface{}{
+				"matchLabels": map[string]string{
+					"app": "console",
+				},
+			},
+			"policyTypes": []string{
+				"Ingress",
+			},
+		},
+	}
+	policy.SetGroupVersionKind(schema.GroupVersionKind{
+		Group:   "networking.k8s.io",
+		Kind:    "NetworkPolicy",
+		Version: "v1",
+	})
+	return *policy
 }
 
 // SetupWithManager sets up the controller with the Manager.

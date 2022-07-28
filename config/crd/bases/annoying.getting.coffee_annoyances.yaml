@@ -36,9 +36,11 @@ spec:
             description: AnnoyanceSpec defines the desired state of Annoyance
             properties:
               nuance:
-                description: 'Nuance is the type of annoyance to inject. Supported
-                  nuances: publishingstrategy'
-                type: string
+                description: 'Nuance is the type of annoyances to inject. Supported
+                  nuances: publishingstrategy, networkpolicy'
+                items:
+                  type: string
+                type: array
             type: object
           status:
             description: AnnoyanceStatus defines the observed state of Annoyance
